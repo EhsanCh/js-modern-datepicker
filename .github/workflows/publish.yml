@@ -7,6 +7,7 @@ name: Publish Package
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -22,11 +23,11 @@ jobs:
         with:
           node-version: '22'
           registry-url: https://registry.npmjs.org
-          package-manager-cache: false
 
       - run: npm ci
 
       - name: Verify package version matches release tag
+        if: github.event_name == 'release'
         run: |
           TAG="${{ github.event.release.tag_name }}"
           TAG_VERSION="${TAG#v}"
@@ -37,4 +38,4 @@ jobs:
           fi
 
       - run: npm run checkAll
-      - run: npm publish
+      - run: npm publish --provenance --access public
