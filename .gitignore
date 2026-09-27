@@ -1,0 +1,6 @@
+node_modules
+lib
+coverage
+demo/app.js
+.cursor
+.vscode

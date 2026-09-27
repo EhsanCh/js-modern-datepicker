@@ -1,0 +1,108 @@
+{
+  "name": "js-modern-datepicker",
+  "version": "1.0.0",
+  "description": "Headless Persian/Gregorian calendar with optional Tailwind UI — vanilla JS and Alpine.js",
+  "main": "lib/index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "require": "./lib/index.js"
+    },
+    "./headless": {
+      "types": "./index.d.ts",
+      "require": "./lib/headless.js"
+    },
+    "./vanilla": {
+      "types": "./index.d.ts",
+      "require": "./lib/vanilla.js"
+    },
+    "./alpine": {
+      "types": "./index.d.ts",
+      "require": "./lib/alpine.js"
+    },
+    "./templates/tailwind": {
+      "types": "./index.d.ts",
+      "require": "./lib/templates/tailwind.js"
+    },
+    "./templates/classic.css": "./lib/templates/classic.css"
+  },
+  "scripts": {
+    "lint": "prettier --check \"src/**/*.js\" \"test/**/*.js\"",
+    "lint:write": "prettier --write \"src/**/*.js\" \"test/**/*.js\"",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "clean": "rimraf lib",
+    "build": "cross-env NODE_ENV=production rollup -c",
+    "prepack": "npm run build",
+    "size": "npm run build && size-limit",
+    "checkAll": "npm run size && npm run lint && npm run test",
+    "deps:check": "npm outdated && npm audit",
+    "demo:build": "esbuild demo/main.js --bundle --format=esm --outfile=demo/app.js && node -e \"require('fs').copyFileSync('src/templates/classic.css','demo/classic.css')\"",
+    "demo": "npm run demo:build && serve demo -l 4173"
+  },
+  "files": [
+    "lib",
+    "index.d.ts",
+    "README.md",
+    "LICENSE"
+  ],
+  "author": "Ehsan Chavoshi (https://github.com/EhsanCh)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EhsanCh/js-modern-datepicker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/EhsanCh/js-modern-datepicker/issues"
+  },
+  "homepage": "https://github.com/EhsanCh/js-modern-datepicker#readme",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "keywords": [
+    "js-modern-datepicker",
+    "calendar",
+    "datepicker",
+    "headless",
+    "alpinejs",
+    "vanilla",
+    "tailwind",
+    "jalali",
+    "persian",
+    "gregorian"
+  ],
+  "size-limit": [
+    {
+      "path": "./lib/headless.js",
+      "limit": "15 KB"
+    }
+  ],
+  "dependencies": {
+    "jalaali-js": "^2.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.29.7",
+    "@babel/preset-env": "^7.29.7",
+    "@rollup/plugin-babel": "^7.1.0",
+    "@rollup/plugin-commonjs": "^29.0.3",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-terser": "^1.0.0",
+    "@size-limit/preset-small-lib": "^14.1.0",
+    "babel-jest": "^30.5.2",
+    "cross-env": "^10.1.0",
+    "esbuild": "^0.28.2",
+    "jest": "^30.5.2",
+    "prettier": "^3.8.1",
+    "rimraf": "^6.1.3",
+    "rollup": "^4.59.0",
+    "serve": "^14.2.5",
+    "size-limit": "^14.1.0"
+  },
+  "allowScripts": {
+    "esbuild": true,
+    "@parcel/watcher": true,
+    "unrs-resolver": true
+  }
+}
