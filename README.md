@@ -6,11 +6,34 @@ Headless Persian (Jalali) and Gregorian calendar and date picker. Ship your own 
 
 **Live demo:** [ehsanch.github.io/js-modern-datepicker](https://ehsanch.github.io/js-modern-datepicker/) (classic UI; deployed from `demo/` on GitHub Pages)
 
+**API reference:** [docs/API.md](docs/API.md) — options, methods, value types, exports, and React package comparison.
+
 ## Install
 
 ```bash
 npm install js-modern-datepicker
 ```
+
+When using the classic UI or input popup, load the stylesheet once:
+
+```js
+require('js-modern-datepicker/templates/classic.css');
+// or in bundlers: import 'js-modern-datepicker/templates/classic.css';
+```
+
+## Features (overview)
+
+- **Calendars:** Jalali (`locale: 'fa'`) and Gregorian (`locale: 'en'`), or a custom `Locale` object (RTL/LTR, localized labels and digits).
+- **Value modes** — inferred from `value` (see [API — Value types](docs/API.md#value-modes)):
+  - Single: `null` or `{ year, month, day }`
+  - Range: `{ from: Day | null, to: Day | null }`
+  - Multiple: `[]` or an array of days
+- **Adapters:** headless (`createCalendar`), vanilla inline (`createDatePicker`), vanilla input popup (`createInputDatePicker`), Alpine (`calendarDatepicker`, `calendarInputDatepicker`).
+- **UI skins:** classic CSS (default) or Tailwind class map (`ui: 'tailwind'`).
+- **Constraints & styling:** min/max date, disabled days, weekends, per-day CSS classes, classic theme colors, animated month change and month/year panels.
+- **Input popup:** formatted read-only field, optional custom `formatInputText`, popper placement, open/close hooks.
+
+TypeScript: [`index.d.ts`](index.d.ts).
 
 ## Quick start
 
@@ -34,7 +57,7 @@ calendar.subscribe((snapshot) => {
 calendar.selectDay({ year: 1404, month: 1, day: 1 });
 ```
 
-### Vanilla (DOM + classic UI)
+### Vanilla — inline calendar
 
 ```js
 const { createDatePicker } = require('js-modern-datepicker/vanilla');
@@ -43,7 +66,7 @@ require('js-modern-datepicker/templates/classic.css');
 createDatePicker({
   element: document.getElementById('calendar'),
   locale: 'fa',
-  ui: 'classic', // default
+  ui: 'classic',
   value: null,
   onChange(value) {
     console.log(value);
@@ -51,50 +74,60 @@ createDatePicker({
 });
 ```
 
-Value shapes: single `{ year, month, day }`, range `{ from, to }`, or multiple dates `[{ … }, …]`.
+### Vanilla — input + popup
+
+```js
+const { createInputDatePicker } = require('js-modern-datepicker/vanilla');
+require('js-modern-datepicker/templates/classic.css');
+
+const picker = createInputDatePicker({
+  input: '#my-date',
+  locale: 'fa',
+  value: null,
+  onChange(value) {
+    console.log(value);
+  },
+});
+// picker.open(), picker.close(), picker.destroy()
+```
 
 ### Alpine.js
 
 ```js
 import Alpine from 'alpinejs';
 import { registerCalendarDatepicker } from 'js-modern-datepicker/alpine';
+import 'js-modern-datepicker/templates/classic.css';
 
 registerCalendarDatepicker(Alpine);
 Alpine.start();
 ```
 
 ```html
-<div
-  x-data="calendarDatepicker({ locale: 'fa', value: null })"
-  x-html="render()"
-></div>
+<div x-data="calendarInputDatepicker({ locale: 'fa', value: null })">
+  <input x-ref="input" type="text" />
+</div>
 ```
 
-See `index.d.ts` and `src/` for the full API (`goToMonth`, min/max dates, disabled days, etc.).
+More examples (Tailwind, `formatDatePickerInput`, render helpers, full option lists): **[docs/API.md](docs/API.md)**.
 
 ## Package exports
 
-| Import | Description |
-|--------|-------------|
-| `js-modern-datepicker` | Barrel re-exports |
-| `js-modern-datepicker/headless` | `createCalendar`, utils |
-| `js-modern-datepicker/vanilla` | `createDatePicker`, render helpers |
-| `js-modern-datepicker/alpine` | `calendarDatepicker`, `registerCalendarDatepicker` |
-| `js-modern-datepicker/templates/tailwind` | Tailwind class map |
-| `js-modern-datepicker/templates/classic.css` | Classic skin (CSS) |
+| Import | Contents |
+|--------|----------|
+| `js-modern-datepicker` | Barrel |
+| `js-modern-datepicker/headless` | `createCalendar`, `utils`, `getValueType`, … |
+| `js-modern-datepicker/vanilla` | `createDatePicker`, `createInputDatePicker`, `formatDatePickerInput`, render helpers |
+| `js-modern-datepicker/alpine` | `calendarDatepicker`, `calendarInputDatepicker`, `registerCalendarDatepicker` |
+| `js-modern-datepicker/templates/tailwind` | `tailwindTemplate`, `composeTailwindDayClasses` |
+| `js-modern-datepicker/templates/classic.css` | Classic skin |
 
 ## Demo
 
-**Online:** [https://ehsanch.github.io/js-modern-datepicker/](https://ehsanch.github.io/js-modern-datepicker/) — updates on every push to `main` (workflow [`.github/workflows/pages.yml`](.github/workflows/pages.yml)).
+**Online:** [https://ehsanch.github.io/js-modern-datepicker/](https://ehsanch.github.io/js-modern-datepicker/) — deployed from `demo/` on push to `main`.
 
-**Local:**
+Includes `createInputDatePicker`, inline single/range/multiple, and Jalali sample.
 
-```bash
-npm install
-npm run demo
-```
-
-Open [http://localhost:4173](http://localhost:4173).
+**Local:** `npm install` → `npm run demo` → [http://localhost:4173](http://localhost:4173).
 
 ## Development
 
@@ -108,11 +141,11 @@ npm run checkAll # size limit, prettier, tests
 
 **js-modern-datepicker** (from 1.0.0) is a headless rewrite with vanilla and Alpine adapters, maintained by Ehsan Chavoshi.
 
-The **classic** stylesheet and overall UX are ported from the first version of this work:
+The **classic** stylesheet and overall UX are ported from:
 
 - [react-modern-calendar-datepicker](https://github.com/Kiarash-Z/react-modern-calendar-datepicker) by **Kiarash Zarinmehr** (MIT)
 
-Thank you to the original author and contributors for the calendar design and behavior that this package builds on.
+See [API — Comparison with react-modern-calendar-datepicker](docs/API.md#comparison-with-react-modern-calendar-datepicker).
 
 ## License
 

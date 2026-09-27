@@ -1,4 +1,5 @@
 import { createCalendar } from '../headless/createCalendar';
+import { createInputDatePicker } from '../vanilla/inputDatePicker';
 
 /**
  * Alpine.data factory — use with x-data="calendarDatepicker({ locale: 'fa', ... })".
@@ -30,6 +31,9 @@ export function calendarDatepicker(userOptions = {}) {
     goToMonth(direction) {
       this.calendar.goToMonth(direction);
     },
+    completeMonthTransition() {
+      this.calendar.completeMonthTransition();
+    },
     toggleMonthSelector() {
       this.calendar.toggleMonthSelector();
     },
@@ -48,9 +52,69 @@ export function calendarDatepicker(userOptions = {}) {
   };
 }
 
+/**
+ * Input + popup (classic UI). Markup:
+ * <div x-data="calendarInputDatepicker({ locale: 'fa' })">
+ *   <input x-ref="input" type="text" />
+ * </div>
+ */
+export function calendarInputDatepicker(userOptions = {}) {
+  return {
+    picker: null,
+    calendar: null,
+    isOpen: false,
+    init() {
+      const { onChange, onOpen, onClose, input: inputOption, ...rest } = userOptions;
+      const input = inputOption ?? this.$refs.input;
+      if (!input) {
+        throw new Error(
+          'calendarInputDatepicker: provide `input` or add x-ref="input" on the field element.',
+        );
+      }
+
+      this.picker = createInputDatePicker({
+        ui: 'classic',
+        ...rest,
+        input,
+        onChange: (value) => {
+          if (typeof onChange === 'function') onChange(value);
+          this.calendar = this.picker.calendar;
+        },
+        onOpen: () => {
+          this.isOpen = true;
+          if (typeof onOpen === 'function') onOpen();
+        },
+        onClose: () => {
+          this.isOpen = false;
+          if (typeof onClose === 'function') onClose();
+        },
+      });
+      this.calendar = this.picker.calendar;
+
+      if (typeof this.$cleanup === 'function') {
+        this.$cleanup(() => this.picker?.destroy());
+      }
+    },
+    open() {
+      this.picker?.open();
+    },
+    close() {
+      this.picker?.close();
+    },
+    destroy() {
+      this.picker?.destroy();
+      this.picker = null;
+      this.calendar = null;
+    },
+  };
+}
+
 export function registerCalendarDatepicker(Alpine, defaultOptions = {}) {
   Alpine.data('calendarDatepicker', (options) =>
     calendarDatepicker({ ...defaultOptions, ...options }),
+  );
+  Alpine.data('calendarInputDatepicker', (options) =>
+    calendarInputDatepicker({ ...defaultOptions, ...options }),
   );
 }
 

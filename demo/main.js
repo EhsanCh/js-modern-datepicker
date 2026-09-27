@@ -1,4 +1,8 @@
-import { createDatePicker } from '../src/vanilla/index.js';
+import {
+  createDatePicker,
+  createInputDatePicker,
+  formatDatePickerInput,
+} from '../src/vanilla/index.js';
 
 function mount(id, outId, options) {
   const pre = document.getElementById(outId);
@@ -13,6 +17,25 @@ function mount(id, outId, options) {
     },
   });
 }
+
+function mountInputPicker() {
+  const pre = document.getElementById('out-input');
+
+  createInputDatePicker({
+    input: '#input-picker-field',
+    locale: 'en',
+    ui: 'classic',
+    shouldHighlightWeekends: true,
+    calendarPopperPosition: 'auto',
+    value: null,
+    onChange: (value) => {
+      pre.textContent = JSON.stringify(value, null, 2);
+      pre.title = `Formatted in input: ${formatDatePickerInput(value, 'en')}`;
+    },
+  });
+}
+
+mountInputPicker();
 
 mount('cal-single', 'out-single', { value: null });
 

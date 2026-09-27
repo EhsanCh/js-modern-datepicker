@@ -570,3 +570,50 @@
     transform: translateX(0);
   }
 }
+
+.DatePicker {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+
+.DatePicker__input {
+  font-family: inherit;
+  font-size: 1rem;
+  width: 100%;
+  min-width: 14em;
+  max-width: 100%;
+  padding: 0.55em 0.75em;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #fff;
+  color: #1e293b;
+  box-sizing: border-box;
+}
+
+.DatePicker__input:focus {
+  outline: 2px solid #94a3b8;
+  outline-offset: 1px;
+}
+
+.DatePicker__input::placeholder {
+  color: #94a3b8;
+}
+
+.DatePicker__calendarContainer {
+  position: absolute;
+  z-index: 40;
+  left: 50%;
+  transform: translateX(-50%);
+  top: calc(100% + 0.45em);
+}
+
+.DatePicker__calendarContainer[hidden] {
+  display: none !important;
+}
+
+.DatePicker__calendarContainer.-top {
+  top: auto;
+  bottom: calc(100% + 0.45em);
+}

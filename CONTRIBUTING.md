@@ -22,3 +22,7 @@ Before the first automated publish, create the package on npm and add a Trusted 
 ## GitHub Pages demo
 
 The interactive demo is deployed from the `demo/` directory by [`.github/workflows/pages.yml`](.github/workflows/pages.yml). In the repository **Settings → Pages**, set **Build and deployment → Source** to **GitHub Actions**. After the first successful run, the site is available at `https://<github-username>.github.io/js-modern-datepicker/`.
+
+The demo source is `demo/main.js` (bundled to `demo/app.js` via `npm run demo:build`). It showcases `createInputDatePicker`, inline `createDatePicker`, and Jalali locale — keep it in sync when adding public APIs.
+
+Public API documentation lives in [`docs/API.md`](docs/API.md); update it when changing options or exports.

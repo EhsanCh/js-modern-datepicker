@@ -1,6 +1,6 @@
 {
   "name": "js-modern-datepicker",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Headless Persian/Gregorian calendar with optional Tailwind UI — vanilla JS and Alpine.js",
   "main": "lib/index.js",
   "types": "index.d.ts",

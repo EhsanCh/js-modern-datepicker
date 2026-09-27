@@ -163,6 +163,11 @@ export function composeTailwindDayClasses(
 export interface DatePickerMountOptions<TValue extends Value = DayValue>
   extends CalendarOptions<TValue> {
   element: HTMLElement;
+  ui?: 'classic' | 'tailwind';
+  colorPrimary?: string;
+  colorPrimaryLight?: string;
+  slideAnimationDuration?: string;
+  calendarClassName?: string;
   template?: Partial<TailwindTemplate>;
   composeDayClasses?: (day: CalendarDayCell, template?: TailwindTemplate) => string;
   renderFooter?: (snapshot: CalendarSnapshot<TValue>) => string;
@@ -177,6 +182,39 @@ export function createDatePicker<TValue extends Value = DayValue>(
   render(): void;
 };
 
+export interface InputDatePickerOptions<TValue extends Value = DayValue>
+  extends Omit<DatePickerMountOptions<TValue>, 'element'> {
+  input: HTMLInputElement | string;
+  wrapper?: HTMLElement;
+  calendarPopperPosition?: 'auto' | 'top' | 'bottom';
+  wrapperClassName?: string;
+  inputClassName?: string;
+  inputPlaceholder?: string;
+  inputName?: string;
+  formatInputText?: (value: TValue) => string;
+  closeOnSelect?: boolean;
+  onOpen?: () => void;
+  onClose?: () => void;
+}
+
+export function createInputDatePicker<TValue extends Value = DayValue>(
+  options: InputDatePickerOptions<TValue>,
+): {
+  calendar: CalendarController<TValue>;
+  input: HTMLInputElement;
+  wrapper: HTMLElement;
+  open(): void;
+  close(): void;
+  destroy(): void;
+  render(): void;
+};
+
+export function formatDatePickerInput<TValue extends Value = DayValue>(
+  value: TValue,
+  locale?: string | Locale,
+  formatInputText?: (value: TValue) => string,
+): string;
+
 export function renderCalendarMarkup<TValue extends Value = DayValue>(
   snapshot: CalendarSnapshot<TValue>,
   options?: {
@@ -186,9 +224,7 @@ export function renderCalendarMarkup<TValue extends Value = DayValue>(
   },
 ): string;
 
-export function calendarDatepicker<TValue extends Value = DayValue>(
-  userOptions?: CalendarOptions<TValue>,
-): {
+type AlpineCalendarDatepickerComponent<TValue extends Value = DayValue> = {
   calendar: CalendarController<TValue> | null;
   state: CalendarSnapshot<TValue>;
   init(): void;
@@ -203,7 +239,32 @@ export function calendarDatepicker<TValue extends Value = DayValue>(
   destroy(): void;
 };
 
+type AlpineInputDatepickerOptions<TValue extends Value = DayValue> = Omit<
+  InputDatePickerOptions<TValue>,
+  'input'
+> & {
+  input?: HTMLInputElement | string;
+};
+
+type AlpineInputDatepickerComponent<TValue extends Value = DayValue> = {
+  picker: ReturnType<typeof createInputDatePicker<TValue>> | null;
+  calendar: CalendarController<TValue> | null;
+  isOpen: boolean;
+  init(): void;
+  open(): void;
+  close(): void;
+  destroy(): void;
+};
+
+export function calendarDatepicker<TValue extends Value = DayValue>(
+  userOptions?: CalendarOptions<TValue>,
+): AlpineCalendarDatepickerComponent<TValue>;
+
+export function calendarInputDatepicker<TValue extends Value = DayValue>(
+  userOptions?: AlpineInputDatepickerOptions<TValue>,
+): AlpineInputDatepickerComponent<TValue>;
+
 export function registerCalendarDatepicker(
-  Alpine: { data: (name: string, factory: (options?: CalendarOptions) => unknown) => void },
+  Alpine: { data: (name: string, factory: (options?: Record<string, unknown>) => unknown) => void },
   defaultOptions?: CalendarOptions,
 ): void;

@@ -96,6 +96,16 @@
         text-align: center;
         max-width: 28em;
       }
+      .panel--input {
+        grid-column: 1 / -1;
+        max-width: 36rem;
+        margin: 0 auto;
+        width: 100%;
+      }
+      .panel--input .DatePicker {
+        width: 100%;
+        max-width: 22rem;
+      }
     </style>
   </head>
   <body>
@@ -109,9 +119,24 @@
       <p>
         Most examples use the <strong>Gregorian</strong> locale (<code>en</code>). The last
         panel uses <strong>Jalali</strong> (<code>fa</code>) to show Persian calendar support.
+        The first panel uses <code>createInputDatePicker</code> (vanilla) — the same API as
+        <code>calendarInputDatepicker</code> in Alpine.js.
       </p>
     </header>
     <div class="panels">
+      <div class="panel panel--input">
+        <h2>Input + popup</h2>
+        <p class="hint">
+          <code>createInputDatePicker</code> · Gregorian · click the field; formatted text in the
+          input, raw value in JSON below
+        </p>
+        <input type="text" id="input-picker-field" aria-label="Date picker input demo" />
+        <pre id="out-input">—</pre>
+        <p class="hint">
+          Uses <code>calendarPopperPosition: 'auto'</code> and closes after a single date is
+          selected (default).
+        </p>
+      </div>
       <div class="panel">
         <h2>Single date</h2>
         <p class="hint">Gregorian · one <code>{ year, month, day }</code></p>
