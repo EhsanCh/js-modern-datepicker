@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>js-modern-datepicker — demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Vazirmatn:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./classic.css" />
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 1.5rem;
+        padding: 2rem 1rem 3rem;
+        background: #eef2f6;
+        font-family: 'DM Sans', 'Vazirmatn', system-ui, sans-serif;
+        color: #1e293b;
+      }
+      .intro {
+        width: 100%;
+        max-width: 42rem;
+        text-align: center;
+      }
+      h1 {
+        font-size: 1.35rem;
+        margin: 0 0 0.75rem;
+        font-weight: 650;
+      }
+      .intro p {
+        margin: 0;
+        font-size: 0.95rem;
+        line-height: 1.55;
+        color: #475569;
+      }
+      .intro p + p {
+        margin-top: 0.65rem;
+      }
+      .panels {
+        display: grid;
+        gap: 2rem;
+        width: 100%;
+        max-width: 72rem;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+      }
+      .panel {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .panel h2 {
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin: 0;
+        color: #334155;
+      }
+      .panel .hint {
+        font-size: 0.75rem;
+        color: #64748b;
+        margin: 0;
+        text-align: center;
+        max-width: 28em;
+      }
+      pre {
+        font-size: 0.7rem;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 0.5rem;
+        width: 100%;
+        max-width: 33em;
+        max-height: 6rem;
+        overflow: auto;
+        margin: 0;
+        font-family: ui-monospace, 'Cascadia Code', 'Segoe UI Mono', monospace;
+      }
+      .panel--jalali .Calendar {
+        font-family: 'Vazirmatn', system-ui, sans-serif;
+      }
+      .panel-fa-note {
+        font-family: 'Vazirmatn', system-ui, sans-serif;
+        direction: rtl;
+        font-size: 0.8rem;
+        line-height: 1.65;
+        color: #475569;
+        margin: 0.25rem 0 0;
+        text-align: center;
+        max-width: 28em;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="intro">
+      <h1>js-modern-datepicker — classic UI demo</h1>
+      <p>
+        Headless Persian (Jalali) and Gregorian calendar with optional classic styling.
+        Pick dates below; the JSON under each calendar shows the value shape returned by
+        <code>onChange</code>.
+      </p>
+      <p>
+        Most examples use the <strong>Gregorian</strong> locale (<code>en</code>). The last
+        panel uses <strong>Jalali</strong> (<code>fa</code>) to show Persian calendar support.
+      </p>
+    </header>
+    <div class="panels">
+      <div class="panel">
+        <h2>Single date</h2>
+        <p class="hint">Gregorian · one <code>{ year, month, day }</code></p>
+        <div id="cal-single"></div>
+        <pre id="out-single">—</pre>
+      </div>
+      <div class="panel">
+        <h2>Date range</h2>
+        <p class="hint">Gregorian · <code>{ from, to }</code></p>
+        <div id="cal-range"></div>
+        <pre id="out-range">—</pre>
+      </div>
+      <div class="panel">
+        <h2>Multiple dates</h2>
+        <p class="hint">Gregorian · array of days</p>
+        <div id="cal-multi"></div>
+        <pre id="out-multi">—</pre>
+      </div>
+      <div class="panel panel--jalali">
+        <h2>Jalali (Persian) sample</h2>
+        <p class="hint">Shamsi calendar · <code>locale: 'fa'</code></p>
+        <div id="cal-fa"></div>
+        <pre id="out-fa">—</pre>
+        <p class="panel-fa-note">
+          تقویم شمسی (جلالی) با <code>locale: 'fa'</code> فعال می‌شود؛ اعداد و نام ماه‌ها فارسی
+          هستند و جهت رابط راست‌به‌چپ است. همان API و شکل مقدار ({ year, month, day }) مثل
+          میلادی است.
+        </p>
+      </div>
+    </div>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
