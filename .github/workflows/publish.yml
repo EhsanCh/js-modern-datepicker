@@ -1,0 +1,40 @@
+# Publishes to npm when a GitHub Release is published.
+# Configure npm Trusted Publisher for this exact filename: publish.yml
+# https://docs.npmjs.com/trusted-publishers/
+
+name: Publish Package
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+
+      - run: npm ci
+
+      - name: Verify package version matches release tag
+        run: |
+          TAG="${{ github.event.release.tag_name }}"
+          TAG_VERSION="${TAG#v}"
+          PKG_VERSION=$(node -p "require('./package.json').version")
+          if [ "$TAG_VERSION" != "$PKG_VERSION" ]; then
+            echo "Release tag version ($TAG_VERSION) does not match package.json ($PKG_VERSION)."
+            exit 1
+          fi
+
+      - run: npm run checkAll
+      - run: npm publish
